@@ -20,7 +20,7 @@ public abstract class Account {
 
     @Column(name = "accountNumber")
     private int accountNumber;
-    
+
     @Column
     protected double balance;
 
