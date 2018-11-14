@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import ca.ulaval.glo4002.atm.application.ServiceLocator;
 import ca.ulaval.glo4002.atm.application.banking.BankingService;
 import ca.ulaval.glo4002.atm.application.banking.ReceiptDto;
+import ca.ulaval.glo4002.atm.application.banking.WithdrawalRequest;
 
 @Path("/accounts/{accountNumber}/withdraw")
 @Consumes(MediaType.APPLICATION_JSON)

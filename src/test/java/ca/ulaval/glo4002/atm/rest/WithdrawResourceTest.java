@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import ca.ulaval.glo4002.atm.application.banking.BankingService;
 import ca.ulaval.glo4002.atm.application.banking.ReceiptDto;
+import ca.ulaval.glo4002.atm.application.banking.WithdrawalRequest;
 
 import static org.junit.Assert.assertSame;
 import static org.mockito.BDDMockito.willReturn;

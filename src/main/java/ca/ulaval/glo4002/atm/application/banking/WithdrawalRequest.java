@@ -1,4 +1,4 @@
-package ca.ulaval.glo4002.atm.rest;
+package ca.ulaval.glo4002.atm.application.banking;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

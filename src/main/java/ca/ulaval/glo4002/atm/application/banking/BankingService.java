@@ -7,7 +7,6 @@ import ca.ulaval.glo4002.atm.domain.accounts.AccountRepository;
 import ca.ulaval.glo4002.atm.domain.accounts.transactions.Receipt;
 import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionAbortedException;
 import ca.ulaval.glo4002.atm.domain.dispensers.CashDispenser;
-import ca.ulaval.glo4002.atm.rest.WithdrawalRequest;
 
 public class BankingService {
 
