@@ -137,6 +137,9 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*ITest.java</exclude>
+                        <exclude>**/*ITestSuite.java</exclude>
+                        <exclude>**/*RestTest.java</exclude>
+                        <exclude>**/*LargeTest.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -152,7 +155,9 @@
                             </excludes>
                             <includes>
                                 <include>**/*ITest.java</include>
+                                <include>**/*ITestSuite.java</include>
                             </includes>
+                            <forkMode>always</forkMode>
                         </configuration>
                     </execution>
                 </executions>
