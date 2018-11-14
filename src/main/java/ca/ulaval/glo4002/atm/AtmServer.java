@@ -25,8 +25,10 @@ public class AtmServer {
     private Server server;
 
     public static void main(String[] args) {
-        int httpPort = Optional.ofNullable(System.getProperty(PORT_PROPERTY)).map(p -> Integer.parseInt(p)).orElse(DEFAULT_PORT);
-        Context context = resolveContext(Optional.ofNullable(System.getProperty(CONTEXT_PROPERTY)).orElse(DEFAULT_CONTEXT));
+        int httpPort = Optional.ofNullable(System.getProperty(PORT_PROPERTY)).map(Integer::parseInt)
+                .orElse(DEFAULT_PORT);
+        Context context =
+                resolveContext(Optional.ofNullable(System.getProperty(CONTEXT_PROPERTY)).orElse(DEFAULT_CONTEXT));
 
         AtmServer server = new AtmServer();
         server.start(httpPort, context);
@@ -45,11 +47,15 @@ public class AtmServer {
     }
 
     public void start(int httpPort, Context context) {
+        start(httpPort, context, true);
+    }
+
+    public void start(int httpPort, Context context, boolean registerEntityManagerFilter) {
         context.apply();
 
         server = new Server(httpPort);
         ServletContextHandler servletContextHandler = new ServletContextHandler(server, "/");
-        configurerJersey(servletContextHandler);
+        configurerJersey(servletContextHandler, registerEntityManagerFilter);
         try {
             server.start();
         } catch (Exception e) {
@@ -85,10 +91,13 @@ public class AtmServer {
         }
     }
 
-    private void configurerJersey(ServletContextHandler servletContextHandler) {
+    private void configurerJersey(ServletContextHandler servletContextHandler, boolean registerEntityManagerFilter) {
         ServletContainer container = new ServletContainer(new ResourceConfig().packages("ca.ulaval.glo4002.atm.rest"));
         ServletHolder jerseyServletHolder = new ServletHolder(container);
         servletContextHandler.addServlet(jerseyServletHolder, "/*");
-        servletContextHandler.addFilter(EntityManagerContextFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
+
+        if (registerEntityManagerFilter) {
+            servletContextHandler.addFilter(EntityManagerContextFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
+        }
     }
 }
