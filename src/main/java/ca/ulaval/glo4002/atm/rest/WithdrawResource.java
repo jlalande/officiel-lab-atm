@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import ca.ulaval.glo4002.atm.application.ServiceLocator;
 import ca.ulaval.glo4002.atm.application.banking.BankingService;
-import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionLog;
+import ca.ulaval.glo4002.atm.application.banking.ReceiptDto;
 
 @Path("/accounts/{accountNumber}/withdraw")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -27,7 +27,7 @@ public class WithdrawResource {
     }
 
     @PUT
-    public TransactionLog withdrawMoney(@PathParam("accountNumber") int accountNumber, WithdrawalRequest withdrawalRequest) {
+    public ReceiptDto withdrawMoney(@PathParam("accountNumber") int accountNumber, WithdrawalRequest withdrawalRequest) {
         return bankingService.withdrawMoney(accountNumber, withdrawalRequest);
     }
 

@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionLog;
+import ca.ulaval.glo4002.atm.domain.accounts.transactions.Receipt;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -28,7 +28,7 @@ public abstract class Account {
         this.balance = balance;
     }
 
-    public abstract TransactionLog debit(double amount);
+    public abstract Receipt debit(double amount);
 
     public int getAccountNumber() {
         return accountNumber;

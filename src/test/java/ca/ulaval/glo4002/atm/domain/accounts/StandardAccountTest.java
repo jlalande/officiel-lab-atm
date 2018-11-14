@@ -1,11 +1,12 @@
 package ca.ulaval.glo4002.atm.domain.accounts;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionLog;
 import org.junit.Before;
 import org.junit.Test;
+
+import ca.ulaval.glo4002.atm.domain.accounts.transactions.Receipt;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class StandardAccountTest {
 
@@ -17,13 +18,13 @@ public class StandardAccountTest {
     }
 
     @Test
-    public void debitCreatesAnAcceptedTransactionLogIfAccountHasEnoughFunds() {
+    public void debitCreatesAnAcceptedReceiptIfAccountHasEnoughFunds() {
         double amountInAccount = 500;
         account.credit(amountInAccount);
 
-        TransactionLog transactionLog = account.debit(amountInAccount);
+        Receipt receipt = account.debit(amountInAccount);
 
-        assertTrue(transactionLog.isAccepted());
+        assertTrue(receipt.isAccepted());
     }
 
     @Test
@@ -32,19 +33,19 @@ public class StandardAccountTest {
         account.credit(amountInAccount);
 
         account.debit(amountInAccount);
-        TransactionLog transactionLog = account.debit(amountInAccount);
+        Receipt receipt = account.debit(amountInAccount);
 
-        assertFalse(transactionLog.isAccepted());
+        assertFalse(receipt.isAccepted());
     }
 
     @Test
-    public void debitCreatesARefusedTransactionLogIAccountDoesNotHaveEnoughFunds() {
+    public void debitCreatesARefusedReceiptIAccountDoesNotHaveEnoughFunds() {
         double amountInAccount = 500;
         account.credit(amountInAccount);
 
-        TransactionLog transactionLog = account.debit(amountInAccount + 1);
+        Receipt receipt = account.debit(amountInAccount + 1);
 
-        assertFalse(transactionLog.isAccepted());
+        assertFalse(receipt.isAccepted());
     }
 
 }

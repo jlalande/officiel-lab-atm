@@ -2,7 +2,7 @@ package ca.ulaval.glo4002.atm.domain.accounts;
 
 import javax.persistence.Entity;
 
-import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionLog;
+import ca.ulaval.glo4002.atm.domain.accounts.transactions.Receipt;
 
 @Entity
 public class StandardAccount extends Account {
@@ -16,13 +16,13 @@ public class StandardAccount extends Account {
     }
 
     @Override
-    public TransactionLog debit(double amount) {
+    public Receipt debit(double amount) {
         if (balance >= amount) {
             balance -= amount;
-            return TransactionLog.accepted(amount);
+            return Receipt.accepted(amount);
         }
 
-        return TransactionLog.refused(amount);
+        return Receipt.refused(amount);
     }
 
     public void credit(double amount) {

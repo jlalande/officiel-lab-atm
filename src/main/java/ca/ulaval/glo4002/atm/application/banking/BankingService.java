@@ -4,8 +4,8 @@ import ca.ulaval.glo4002.atm.application.ServiceLocator;
 import ca.ulaval.glo4002.atm.application.jpa.EntityManagerProvider;
 import ca.ulaval.glo4002.atm.domain.accounts.Account;
 import ca.ulaval.glo4002.atm.domain.accounts.AccountRepository;
+import ca.ulaval.glo4002.atm.domain.accounts.transactions.Receipt;
 import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionAbortedException;
-import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionLog;
 import ca.ulaval.glo4002.atm.domain.dispensers.CashDispenser;
 import ca.ulaval.glo4002.atm.rest.WithdrawalRequest;
 
@@ -13,39 +13,43 @@ public class BankingService {
 
     private AccountRepository accountRepository;
     private CashDispenser cashDispenser;
+    private ReceiptAssembler receiptAssembler;
     private EntityManagerProvider entityManagerProvider;
 
     public BankingService() {
         this.accountRepository = ServiceLocator.resolve(AccountRepository.class);
         this.cashDispenser = ServiceLocator.resolve(CashDispenser.class);
+        this.receiptAssembler = ServiceLocator.resolve(ReceiptAssembler.class);
     }
 
-    public BankingService(AccountRepository accountRepository, CashDispenser cashDispenser, EntityManagerProvider provider) {
+    public BankingService(AccountRepository accountRepository, CashDispenser cashDispenser,
+            ReceiptAssembler receiptAssembler, EntityManagerProvider provider) {
         this.accountRepository = accountRepository;
         this.cashDispenser = cashDispenser;
+        this.receiptAssembler = receiptAssembler;
         this.entityManagerProvider = provider;
     }
 
-    public TransactionLog withdrawMoney(int accountNumber, WithdrawalRequest withdrawalRequest) {
+    public ReceiptDto withdrawMoney(int accountNumber, WithdrawalRequest withdrawalRequest) {
         if (!cashDispenser.canAccomodateWithdrawal(withdrawalRequest.amount)) {
             throw new TransactionAbortedException();
         }
 
-        TransactionLog transactionLog = executeTransaction(accountNumber, withdrawalRequest);
+        Receipt receipt = executeTransaction(accountNumber, withdrawalRequest);
 
-        if (transactionLog.isAccepted()) {
+        if (receipt.isAccepted()) {
             cashDispenser.dispense(withdrawalRequest.amount);
         }
 
-        return transactionLog;
+        return receiptAssembler.toDto(receipt);
     }
 
-    private TransactionLog executeTransaction(int accountNumber, WithdrawalRequest withdrawalRequest) {
+    private Receipt executeTransaction(int accountNumber, WithdrawalRequest withdrawalRequest) {
         Account account = accountRepository.findByNumber(accountNumber);
-        TransactionLog transactionLog = account.debit(withdrawalRequest.amount);
+        Receipt receipt = account.debit(withdrawalRequest.amount);
 
         entityManagerProvider.executeInTransaction(() -> accountRepository.persist(account));
 
-        return transactionLog;
+        return receipt;
     }
 }

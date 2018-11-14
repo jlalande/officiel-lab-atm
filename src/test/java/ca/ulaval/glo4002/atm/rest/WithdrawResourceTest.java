@@ -1,13 +1,14 @@
 package ca.ulaval.glo4002.atm.rest;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import ca.ulaval.glo4002.atm.application.banking.BankingService;
+import ca.ulaval.glo4002.atm.application.banking.ReceiptDto;
+
 import static org.junit.Assert.assertSame;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.mock;
-
-import ca.ulaval.glo4002.atm.application.banking.BankingService;
-import ca.ulaval.glo4002.atm.domain.accounts.transactions.TransactionLog;
-import org.junit.Before;
-import org.junit.Test;
 
 public class WithdrawResourceTest {
 
@@ -25,13 +26,13 @@ public class WithdrawResourceTest {
     }
 
     @Test
-    public void withdrawMoneyReturnsTheResultingTransactionLog() {
-        TransactionLog expectedTransactionLog = mock(TransactionLog.class);
-        willReturn(expectedTransactionLog).given(bankingService).withdrawMoney(ACCOUNT_NUMBER, withdrawalRequest);
+    public void withdrawMoneyReturnsTheResultingReceipt() {
+        ReceiptDto expectedReceipt = mock(ReceiptDto.class);
+        willReturn(expectedReceipt).given(bankingService).withdrawMoney(ACCOUNT_NUMBER, withdrawalRequest);
 
-        TransactionLog transactionLog = withdrawResource.withdrawMoney(ACCOUNT_NUMBER, withdrawalRequest);
+        ReceiptDto receipt = withdrawResource.withdrawMoney(ACCOUNT_NUMBER, withdrawalRequest);
 
-        assertSame(expectedTransactionLog, transactionLog);
+        assertSame(expectedReceipt, receipt);
     }
 
 }
